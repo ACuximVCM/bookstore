@@ -15,11 +15,11 @@ class CreateReservationsTable extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_book')->constrained('books');
-            $table->foreignId('id_client')->constrained('client');
+            $table->date('reservation_date')->nullable(true);
+            $table->integer('books_total')->nullable(false);
+            $table->decimal('total', 16, 2)->nullable(false)->default(0);
+            $table->boolean('active')->default(true);
             $table->timestamps();
-            //$table->foreign('id_book')->references('id_book')->on('books');
-            //$table->foreign('id_client')->references('id_client')->on('clients');
         });
     }
 

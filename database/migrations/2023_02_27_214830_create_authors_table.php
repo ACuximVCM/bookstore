@@ -15,10 +15,9 @@ class CreateAuthorsTable extends Migration
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('last_name');
-            $table->integer('age');
-            $table->foreignId('id_book')->constrained('books');
+            $table->string('first_name')->nullable(false);
+            $table->string('last_name')->nullable(false);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

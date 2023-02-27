@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Author;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,12 +16,16 @@ class CreateBooksTable extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->float('price');
-            $table->string('edition');
-            $table->foreignId('id_reservation')->constrained('reservations');
-            $table->foreignId('id_author')->constrained('authors');
+            $table->foreignIdFor(Author::class)
+                ->constrained()
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
+            $table->string('name')->nullable(false);
+            $table->date('release_date')->nullable(true);
+            $table->string('details');
+            $table->string('editorial');
+            $table->decimal('price', 16, 4);
+            $table->string('language');
             $table->timestamps();
         });
     }
