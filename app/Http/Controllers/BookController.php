@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookRequest;
 use App\Models\Book;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,13 @@ class BookController extends Controller
      */
     public function index()
     {
-        $libros = Book::where('id', '>=', '0')->get();
+        $libros = Book::with([
+            'author' => function ($query) {
+                $query->select('id', 'first_name', 'last_name');
+            }
+            ])
+        ->where('id', '>=', '0')->get();
+        return $libros;
     }
 
     /**
@@ -25,7 +32,10 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $book = new Book($request->all());
+        $book->save();
+
+        return response(['message' => 'Enviado correctamente']);
     }
 
     /**

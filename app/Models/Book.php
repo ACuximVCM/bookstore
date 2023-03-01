@@ -11,6 +11,8 @@ class Book extends Model
 
     public $table = 'books';
 
+    protected $fillable = ['name', 'author_id', 'release_date', 'details', 'editorial', 'price', 'language'];
+
     public function author()
     {
         return $this->hasOne(Author::class, 'id', 'author_id');
