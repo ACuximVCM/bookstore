@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
 use App\Models\Book;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -17,10 +19,10 @@ class BookController extends Controller
     {
         $libros = Book::with([
             'author' => function ($query) {
-                $query->select('id', 'first_name', 'last_name');
+                $query->select('id', DB::raw("CONCAT(first_name, ' ', last_name) as full_name"));
             }
             ])
-        ->where('id', '>=', '0')->get();
+            ->where('active', 1)->get();
         return $libros;
     }
 
@@ -67,8 +69,15 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-        //
+        $model = Book::where('id', $id)->first();
+
+        $model->update([
+            'active' => !$model->active,
+        ]);
+
+        return response()
+            ->json(['msg' => 'Actualizado']);
     }
 }

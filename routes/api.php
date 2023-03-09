@@ -25,7 +25,10 @@ Route::get('/numero-al-azar', fn (Request $request) => ['random_number' => rand(
 Route::apiResource('reservations', ReservationController::class);
 Route::get('eloquent-example', [ReservationController::class, 'listEloquent']);
 
-Route::get('/authors_list', [AuthorController::class,'index']);
+Route::get('/authors-list', [AuthorController::class,'index']);
+Route::post('/authors', [AuthorController::class, 'store']);
+Route::delete('/author/{id}', [AuthorController::class, 'destroy']);
 
 Route::get('/book', [BookController::class, 'index']);
 Route::post('/books', [BookController::class, 'store']);
+Route::delete('book/{id}', [BookController::class, 'destroy']);

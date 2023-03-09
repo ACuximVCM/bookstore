@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AuthorController extends Controller
 {
@@ -14,7 +15,12 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        $query = Author::select(['id','first_name', 'last_name'])->get();
+        $query = Author::select([
+            'id as value',
+            DB::raw("CONCAT(first_name, ' ', last_name) as label")
+        ])
+        ->where('active', '=', 1)
+        ->get();
         return $query;
     }
 
@@ -26,7 +32,10 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $book = new Author($request->all());
+        $book->save();
+
+        return response(['message' => 'Enviado correctamente']);
     }
 
     /**
@@ -60,6 +69,12 @@ class AuthorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $author = Author::where('id', '=', $id)->first();
+
+        $author->update([
+            'active' => !$author->active
+        ]);
+
+        return response()->json(['message' => 'Removido correctamente']);
     }
 }

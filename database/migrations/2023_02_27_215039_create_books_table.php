@@ -26,6 +26,7 @@ class CreateBooksTable extends Migration
             $table->string('editorial');
             $table->decimal('price', 16, 4);
             $table->string('language');
+            $table->tinyInteger('active')->default(1);
             $table->timestamps();
         });
     }
